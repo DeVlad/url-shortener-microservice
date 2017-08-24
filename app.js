@@ -32,8 +32,7 @@ app.use(function (err, req, res, next) {
         return res.send('Error: ' + err.status + '<br>' + err.message);
     } else {
         // More errors...
-    }
-    next();
+    }    
 });
 
 app.listen(port, console.log('Listening on port:', port));

@@ -1,25 +1,32 @@
-var express = require ('express');
+var express = require('express');
 var router = express.Router();
 var Url = require('../models/url');
 var validateUrl = require('../helpers/url-validator');
+var bodyParser = require('body-parser');
+//p.use(bodyParser.json()); // support json encoded bodies
+//p.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 router.get('/', function (req, res) {
     res.sendFile('index.html');    
 });
 
-// Redirect to main page
-router.get('/api', function (req, res) {
-    res.redirect('/');
-});
-
-router.post('/api/:url', function(req, res, next){
+router.post('/api/:url?', function(req, res, next){
     // TODO check if original url exist in db
-    // Check for url validity
-    /*
+    if(!validateUrl.validateUrl(req.query.url)) {
+        res.send('{ "unix": "Invalid URL" }');
+    }
+   
+   /*
     Url.create(req.body).then(function(url){
         res.send('done');
     }).catch(next);
     */
+   
+   res.send('Url post test success');
+});
+// Redirect to main page
+router.get('/api', function (req, res) {
+   res.redirect('/');
 });
 
 // Handle missing favicon
