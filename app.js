@@ -12,7 +12,7 @@ app.use(express.static(__dirname + '/public'));
 app.use('/', require('./routes/routes'));
 
 // MongoDB
-var MongoClient = require('mongodb').MongoClient;
+/*var MongoClient = require('mongodb').MongoClient;
 var database;
 var url = 'mongodb://localhost:27017/url-shortener';
 // Use connect method to connect to the Server 
@@ -21,7 +21,7 @@ MongoClient.connect(url, function (err, db) {
         console.log('Database connection established');
         database = db;
     }
-});
+});*/
 
 // Error handler
 app.use(function (err, req, res, next) {
