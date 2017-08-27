@@ -14,6 +14,7 @@ router.post('/api/:url?', function (req, res, next) {
     if (!controller.validateUrl(req.query.url)) {        
         res.send('{ "error": "Invalid URL" }');
     }
+    
     //var urlExist = false;
     // TODO: if url exist return existing shortened url
 

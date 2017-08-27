@@ -6,14 +6,16 @@ var sequenceGenerator = require('mongoose-sequence-plugin');
 // Mongoose promises are depricated use global
 mongoose.Promise = global.Promise;
 
-var connection = mongoose.createConnection("mongodb://localhost:27017/url-shortener");
+var connection = mongoose.createConnection("mongodb://localhost:27017/url-shortener", function(err) {
+    if (err) throw err;
+});
 
 //autoNumber.init(connection);
 
 var UrlSchema = new Schema({
-    uid: {
+    /*uid: {
         type: Number,        
-    },
+    },*/
     originalUrl: {
         type: String,
         required: [true, 'Url is required']
@@ -24,11 +26,11 @@ var UrlSchema = new Schema({
 });
 
 //UrlSchema.plugin(autoNumber.plugin, 'uid');
-UrlSchema.plugin(sequenceGenerator, {
-    field: 'uid',
-    startAt: '0',    
-    maxSaveRetries: 2
-});
+//UrlSchema.plugin(sequenceGenerator, {
+//    field: 'uid',
+//    startAt: '0',    
+//    maxSaveRetries: 2
+//});
 
 var Url = mongoose.model('url', UrlSchema);
 module.exports = Url;
