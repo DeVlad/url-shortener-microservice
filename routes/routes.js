@@ -7,28 +7,8 @@ router.get('/', function (req, res) {
     res.sendFile('index.html');
 });
 
-router.post('/api/:url?', function (req, res, next) {
-    // TODO check if original url exist in db
+router.post('/api/:url?', controller.postUrl);
 
-    if (!controller.validateUrl(req.query.url)) {
-        res.send('{ "error": "Invalid URL" }');
-    }
-
-    var data = new Url({
-        originalUrl: req.query.url,
-        shortUrl: "test"
-    });
-
-    Url.create(data, function (err, record) {
-        if (err) {
-            res.send('error saving book');
-        } else {
-            //console.log(record);
-            res.send(record); //success
-        }
-    });
-
-});
 // Redirect to main page
 router.get('/api', function (req, res) {
     res.redirect('/');
