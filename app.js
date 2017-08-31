@@ -1,5 +1,4 @@
 // TODO: check if shortened url is longer then original
-
 var express = require('express'),
     app = express(),
     port = process.env.PORT || 8000;
@@ -11,17 +10,11 @@ app.use(express.static(__dirname + '/public'));
 // Initialize routes
 app.use('/', require('./routes/routes'));
 
-// MongoDB
-/*var MongoClient = require('mongodb').MongoClient;
-var database;
-var url = 'mongodb://localhost:27017/url-shortener';
-// Use connect method to connect to the Server 
-MongoClient.connect(url, function (err, db) {
-    if (!err) {
-        console.log('Database connection established');
-        database = db;
-    }
-});*/
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/url-shortener', {
+    useMongoClient: true,
+    /* other options */
+});
 
 // Error handler
 app.use(function (err, req, res, next) {
@@ -32,7 +25,7 @@ app.use(function (err, req, res, next) {
         return res.send('Error: ' + err.status + '<br>' + err.message);
     } else {
         // More errors...
-    }    
+    }
 });
 
 app.listen(port, console.log('Listening on port:', port));

@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var Url = require('../models/url');
 var controller = require('../controllers/controller');
-var bodyParser = require('body-parser');
 
 router.get('/', function (req, res) {
     res.sendFile('index.html');
@@ -10,29 +9,25 @@ router.get('/', function (req, res) {
 
 router.post('/api/:url?', function (req, res, next) {
     // TODO check if original url exist in db
-    
-    if (!controller.validateUrl(req.query.url)) {        
+
+    if (!controller.validateUrl(req.query.url)) {
         res.send('{ "error": "Invalid URL" }');
     }
-    
-    //var urlExist = false;
-    // TODO: if url exist return existing shortened url
 
-    /*var url = new Url({
-        originalUrl: "${req.query.url}"
+    var data = new Url({
+        originalUrl: req.query.url,
+        shortUrl: "test"
     });
 
-    url.save(function (err) {
-        if (err) return handleError(err);
-        // saved!
-    });*/
+    Url.create(data, function (err, record) {
+        if (err) {
+            res.send('error saving book');
+        } else {
+            //console.log(record);
+            res.send(record); //success
+        }
+    });
 
-   /* Url.create(url).then(function (url) {
-        console.log('db record');
-        res.send('done');
-    }).catch(next);*/
-
-    res.send('Url post test success');
 });
 // Redirect to main page
 router.get('/api', function (req, res) {
