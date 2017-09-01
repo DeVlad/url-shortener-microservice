@@ -12,8 +12,7 @@ app.use('/', require('./routes/routes'));
 
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/url-shortener', {
-    useMongoClient: true,
-    /* other options */
+    useMongoClient: true,    
 });
 
 // Error handler
