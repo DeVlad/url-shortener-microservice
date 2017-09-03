@@ -27,6 +27,7 @@ router.get('*', function (req, res) {
     var link = req.url.substring(1);
 
     if (controller.validateUrl(link)) {
+        //TODO: call get controller
         res.send('Valid url: check db if found redirect');
     } else {
         res.status(404).send('Error: 404. Page not found !');

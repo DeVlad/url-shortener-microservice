@@ -5,19 +5,32 @@ exports.postUrl = function (req, res) {
     if (!validateUrl(req.query.url)) {
         res.send('{ "error": "Invalid URL" }');
     } else {
-        var url = urlPrepare(req.query.url);        
-        // TODO find url if exist
-        var data = new Url({
-            originalUrl: url
-        });
-
-        Url.create(data, function (err, record) {
+        var url = urlPrepare(req.query.url);
+        // Find url if exist
+        Url.findOne({
+            'originalUrl': url
+        }, function (err, record) {
             if (err) {
-                res.send('error saving document');
-            } else {
+                res.send(err);
+            }
+            if (record) {                
                 var shortUrl = generateShortUrl(record.sid);
-                var output = '{' + '"originalUrl":"' + record.originalUrl + '",' + '"shortUrl":' + config.baseUrl + shortUrl + '}';
-                res.send(output); //success
+                var output = '{' + '"originalUrl":"' + record.originalUrl + '",' + '"shortUrl":"' + config.baseUrl + shortUrl + '"}';
+                res.send(output);
+            } else { // If url not exist in DB -> save url
+                var data = new Url({
+                    originalUrl: url
+                });
+
+                Url.create(data, function (err, record) {
+                    if (err) {
+                        res.send('error saving document');
+                    } else {
+                        var shortUrl = generateShortUrl(record.sid);
+                        var output = '{' + '"originalUrl":"' + record.originalUrl + '",' + '"shortUrl":"' + config.baseUrl + shortUrl + '"}';
+                        res.send(output); //success
+                    }
+                });
             }
         });
     }
@@ -34,11 +47,11 @@ var generateSid = function (base36) {
 }
 
 // remove trailing slashes from url
-var urlPrepare = function(url) {
-    if(url.charAt(url.length-1) == '/') {
+var urlPrepare = function (url) {
+    if (url.charAt(url.length - 1) == '/') {
         url = url.replace(/\/+$/, '')
     }
-    return url;    
+    return url;
 }
 
 var validateUrl = function (url) {
