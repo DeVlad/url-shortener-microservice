@@ -2,12 +2,13 @@ var Url = require('../models/url');
 var config = require('../config/config');
 
 exports.postUrl = function (req, res) {
-
     if (!validateUrl(req.query.url)) {
         res.send('{ "error": "Invalid URL" }');
     } else {
+        var url = urlPrepare(req.query.url);        
+        // TODO find url if exist
         var data = new Url({
-            originalUrl: req.query.url            
+            originalUrl: url
         });
 
         Url.create(data, function (err, record) {
@@ -15,7 +16,7 @@ exports.postUrl = function (req, res) {
                 res.send('error saving document');
             } else {
                 var shortUrl = generateShortUrl(record.sid);
-                var output = '{' + '"originalUrl":"' + record.originalUrl + '",' + '"shortUrl":' + config.baseUrl + shortUrl + '}';                
+                var output = '{' + '"originalUrl":"' + record.originalUrl + '",' + '"shortUrl":' + config.baseUrl + shortUrl + '}';
                 res.send(output); //success
             }
         });
@@ -23,13 +24,21 @@ exports.postUrl = function (req, res) {
 };
 
 // convert sid to base36 string
-var generateShortUrl = function (sid) {    
+var generateShortUrl = function (sid) {
     var id = Number(sid);
     return id.toString(36);
 };
 
 var generateSid = function (base36) {
     return parseInt(base36, 36).toString();
+}
+
+// remove trailing slashes from url
+var urlPrepare = function(url) {
+    if(url.charAt(url.length-1) == '/') {
+        url = url.replace(/\/+$/, '')
+    }
+    return url;    
 }
 
 var validateUrl = function (url) {
