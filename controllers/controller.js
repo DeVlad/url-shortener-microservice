@@ -13,7 +13,7 @@ exports.postUrl = function (req, res) {
             if (err) {
                 res.send(err);
             }
-            if (record) {                
+            if (record) {
                 var shortUrl = generateShortUrl(record.sid);
                 var output = '{' + '"originalUrl":"' + record.originalUrl + '",' + '"shortUrl":"' + config.baseUrl + shortUrl + '"}';
                 res.send(output);
@@ -34,6 +34,25 @@ exports.postUrl = function (req, res) {
             }
         });
     }
+};
+
+exports.getUrl = function (req, res) {
+    // Trim slash symbol before and after
+    var link = urlPrepare(req.url.substring(1));
+    var sid = generateSid(link);
+
+    Url.findOne({
+            'sid': sid
+        }, function (err, record) {
+            if (err) {
+                console.log(err);
+            }
+            if (record) {               
+               res.redirect(record.originalUrl);
+            } else {
+                res.status(404).send('Error: 404. Page not found !');
+            }
+        });    
 };
 
 // convert sid to base36 string
