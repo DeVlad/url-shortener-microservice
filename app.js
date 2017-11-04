@@ -11,8 +11,15 @@ app.use(express.static(__dirname + '/public'));
 app.use('/', require('./routes/routes'));
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/url-shortener', {
-    useMongoClient: true,    
+var uri = 'mongodb://localhost/url-shortener';
+var options = {
+    useMongoClient: true,   
+};
+
+mongoose.connect(uri, options, function(error) {
+    if(!error) {        
+        console.log('Database connection established');        
+    }
 });
 
 // Error handler
