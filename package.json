@@ -1,17 +1,21 @@
 {
-  "name": "urlshortener",
-  "version": "1.0.0",
-  "description": "Url shortener API",
-  "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Deyan Vladkov",
-  "license": "ISC",
-  "dependencies": {
-    "express": "^4.15.3",
-    "mongodb": "^2.2.30",
-    "mongoose": "^4.11.5",
-    "mongoose-sequence": "^4.0.0"
-  }
+    "name": "UrlShortener",
+    "version": "1.0.0",
+    "description": "Url Shortener API",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/DeVlad/url-shortener-microservice.git"
+    },
+    "main": "app.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Deyan Vladkov",
+    "license": "MIT",
+    "dependencies": {
+        "express": "^4.16.2",
+        "mongodb": "^3.0.4",
+        "mongoose": "^5.0.9",
+        "mongoose-sequence": "^4.0.1"
+    }
 }
