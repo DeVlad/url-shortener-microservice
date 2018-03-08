@@ -6,7 +6,17 @@ var validateUrl = function (url) {
     return re.test(url);
 };
 
-// remove trailing slashes from url
+// Add http prefix if not provided
+var urlPrefixer = function (url) {
+    var re = /^(?:f|ht)tps?:///g;
+    url = url.trim();
+    if (!re.test(url)) {
+        url = "http://" + url;
+    }
+    return url;
+}
+
+// Remove trailing slashes from url and prepend http if missing
 var urlPrepare = function (url) {
     if (url.charAt(url.length - 1) === '/') {
         url = url.replace(/\/+$/, '');
@@ -14,7 +24,7 @@ var urlPrepare = function (url) {
     return url;
 };
 
-// convert sid to base36 string
+// Convert sid to base36 string
 var generateShortUrl = function (sid) {
     var id = Number(sid);
     return id.toString(36);
@@ -25,10 +35,26 @@ var generateSid = function (base36) {
 };
 
 exports.postUrl = function (req, res) {
-    if (!validateUrl(req.query.url)) {
+    var url = '';
+    if (req.body.shorten) {
+        url = req.body.shorten;
+    } else { // Rebuild posted url with params. TODO: trim 
+        url = req.query.url;
+        urlObject = req.query;
+        if (Object.keys(urlObject).length > 1) {       
+            var rebuildedUrl = '';
+            for (var i in urlObject) {
+                rebuildedUrl += '&' + i + '=' + urlObject[i];
+            }
+            var url = rebuildedUrl.replace(/\s/g, '+').slice(5);
+        }
+    }
+    url = urlPrefixer(url);
+    
+    if (!validateUrl(url)) {
         res.send('{ "error": "Invalid URL" }');
     } else {
-        var url = urlPrepare(req.query.url);
+        url = urlPrepare(url);
         // Find if url exist in database
         Url.findOne({
             'originalUrl': url

@@ -1,25 +1,32 @@
-var express = require('express');
-var router = express.Router();
+var express = require('express'), app = express();
+var path = require('path');
+var bodyParser = require('body-parser');
 var Url = require('../models/url');
 var controller = require('../controllers/controller');
 
-router.get('/', function (req, res) {
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+
+app.use(bodyParser.json());
+
+app.get('/', function (req, res) {
     res.sendFile('index.html');
 });
 
-router.post('/api/:url?', controller.postUrl);
+app.post('/api/:url?', controller.postUrl);
+app.post('/api/link/:url', controller.postUrl);
 
-// Redirect to main page
-router.get('/api', function (req, res) {
-    res.redirect('/');
+app.get('/api', function (req, res) {
+    res.sendFile(path.join(__dirname, '../public', 'api.html'));
 });
 
 // Handle missing favicon
-router.get('/favicon.ico', function (req, res) {
+app.get('/favicon.ico', function (req, res) {
     res.status(204);
 });
 
 // Return 404 on missing pages or redirect if url is shortened
-router.get('*', controller.getUrl);
+app.get('*', controller.getUrl);
 
-module.exports = router;
+module.exports = app;

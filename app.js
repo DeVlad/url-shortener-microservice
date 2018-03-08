@@ -3,14 +3,19 @@ var express = require('express'),
     app = express(),
     port = process.env.PORT || 8000;
 var mongoose = require('mongoose');
+var path = require('path');
 var config = require('./config/config');
 
 // Handle static files
 // TIP: Handle static files before routes
+//app.use(express.static(__dirname + '/public'));
+//app.use('/public', express.static(__dirname + '/public'))
+//app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(__dirname + '/public'));
-
+//app.use('/public', express.static(path.join(__dirname + '/public')));
 // Initialize routes
 app.use('/', require('./routes/routes'));
+
 
 // Database
 var db = mongoose.connection;

@@ -13,9 +13,11 @@
     "author": "Deyan Vladkov",
     "license": "MIT",
     "dependencies": {
+        "body-parser": "^1.18.2",
         "express": "^4.16.2",
         "mongodb": "^3.0.4",
         "mongoose": "^5.0.9",
-        "mongoose-sequence": "^4.0.1"
+        "mongoose-sequence": "^4.0.1",
+        "path": "^0.12.7"
     }
 }
