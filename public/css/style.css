@@ -1,1 +1,18 @@
 /* Styles */
+
+h1 {
+    color: white;
+    margin-bottom: 30px;
+}
+
+body {    
+    background-image: url(../img/background.jpg);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+.help-block {
+    color: white;    
+}

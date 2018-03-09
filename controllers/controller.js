@@ -8,15 +8,15 @@ var validateUrl = function (url) {
 
 // Add http prefix if not provided
 var urlPrefixer = function (url) {
-    var re = /^(?:f|ht)tps?:///g;
+    var re = /^(?:f|ht)tps?:/ //g;
     url = url.trim();
     if (!re.test(url)) {
         url = "http://" + url;
     }
     return url;
-}
+};
 
-// Remove trailing slashes from url and prepend http if missing
+// Remove trailing slashes from url
 var urlPrepare = function (url) {
     if (url.charAt(url.length - 1) === '/') {
         url = url.replace(/\/+$/, '');
@@ -35,24 +35,37 @@ var generateSid = function (base36) {
 };
 
 exports.postUrl = function (req, res) {
+    //console.log('POST url', req);
     var url = '';
-    if (req.body.shorten) {
-        url = req.body.shorten;
-    } else { // Rebuild posted url with params. TODO: trim 
+    var jsonResponse = {
+        error: "Invalid Url"
+    }
+
+    if (req.query.url) { // Rebuild posted url with params. TODO: trim ?
         url = req.query.url;
+        console.log("POST: req.query", url);
         urlObject = req.query;
-        if (Object.keys(urlObject).length > 1) {       
+        if (Object.keys(urlObject).length > 1) {
             var rebuildedUrl = '';
             for (var i in urlObject) {
                 rebuildedUrl += '&' + i + '=' + urlObject[i];
             }
             var url = rebuildedUrl.replace(/\s/g, '+').slice(5);
         }
+    } else if (Object.keys(req.body).length !== 0) { // POST via browser without ajax
+        console.log("POST: req.body", req.body);
+        if (!req.body.url || req.body.url < 4) { // Pre validation filter         
+            return res.send(jsonResponse);
+        }
+        url = req.body.url;
+    } else {
+        return res.send(jsonResponse);
     }
-    url = urlPrefixer(url);
+
+    url = urlPrefixer(url); // Just in case if user tamper request
     
     if (!validateUrl(url)) {
-        res.send('{ "error": "Invalid URL" }');
+        res.send(jsonResponse);
     } else {
         url = urlPrepare(url);
         // Find if url exist in database
@@ -73,7 +86,8 @@ exports.postUrl = function (req, res) {
 
                 Url.create(data, function (err, record) {
                     if (err) {
-                        res.send('error saving document');
+                        jsonResponse.error = 'Error saving document !';
+                        res.send(jsonResponse);
                     } else {
                         var shortUrl = generateShortUrl(record.sid);
                         var output = '{' + '"originalUrl":"' + record.originalUrl + '",' + '"shortUrl":"' + config.baseUrl + shortUrl + '"}';

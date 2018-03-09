@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="description" content="Url shortener">
+    <meta name="description" content="Url shortener API">
     <meta name="author" content="Deyan Vladkov">
     <title>Url shortener API</title>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" defer></script>
@@ -15,10 +15,10 @@
 
 <body>
     <div class="container">
-        <h1>Url Shortener</h1>
-        <p><strong>Sample POST request: </strong><span class="baseurl"></span>/api?url=http://codepen.io/hallowed</p>
-        <p><strong>Example JSON response: </strong>{"originalUrl":"http://codepen.io/hallowed","shortUrl":"<span class="baseurl"></span>/a"}</p>
-        <p><strong>Usage:</strong> <span class="baseurl"></span>/a <br>will redirect to http://codepen.io/hallowed</p>
+        <h1>Url Shortener API</h1>
+        <p><strong>Sample POST request: </strong><span class="baseurl"></span>/api?url=https://github.com/DeVlad</p>
+        <p><strong>Example JSON response: </strong>{"originalUrl":"https://github.com/DeVlad","shortUrl":"<span class="baseurl"></span>/a"}</p>
+        <p><strong>Usage:</strong> <span class="baseurl"></span>/a <br>will redirect to https://github.com/DeVlad</p>
         <script>
             var baseUrl = window.location.origin;
             var elements = document.getElementsByClassName("baseurl");

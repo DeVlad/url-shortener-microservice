@@ -15,7 +15,6 @@ app.get('/', function (req, res) {
 });
 
 app.post('/api/:url?', controller.postUrl);
-app.post('/api/link/:url', controller.postUrl);
 
 app.get('/api', function (req, res) {
     res.sendFile(path.join(__dirname, '../public', 'api.html'));
