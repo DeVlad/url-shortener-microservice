@@ -8,7 +8,7 @@ var validateUrl = function (url) {
 
 // Add http prefix if not provided
 var urlPrefixer = function (url) {
-    var re = /^(?:f|ht)tps?:/ //g;
+    var re = /^(?:f|ht)tps?:///g;
     url = url.trim();
     if (!re.test(url)) {
         url = "http://" + url;
@@ -74,11 +74,14 @@ exports.postUrl = function (req, res) {
         }, function (err, record) {
             if (err) {
                 res.send(err);
-            }
+            }            
             if (record) {
-                var shortUrl = generateShortUrl(record.sid);
-                var output = '{' + '"originalUrl":"' + record.originalUrl + '",' + '"shortUrl":"' + config.baseUrl + shortUrl + '"}';
-                res.send(output);
+                var shortUrl = config.baseUrl + generateShortUrl(record.sid);
+                jsonResponse = {
+                            originalUrl: record.originalUrl,
+                            shortUrl: shortUrl
+                }                
+                res.send(jsonResponse);
             } else { // If url not exist in DB -> save url
                 var data = new Url({
                     originalUrl: url
@@ -89,9 +92,14 @@ exports.postUrl = function (req, res) {
                         jsonResponse.error = 'Error saving document !';
                         res.send(jsonResponse);
                     } else {
-                        var shortUrl = generateShortUrl(record.sid);
-                        var output = '{' + '"originalUrl":"' + record.originalUrl + '",' + '"shortUrl":"' + config.baseUrl + shortUrl + '"}';
-                        res.send(output); //success
+                        var shortUrl = config.baseUrl + generateShortUrl(record.sid);                        
+                        jsonResponse = {
+                            originalUrl: record.originalUrl,
+                            shortUrl: shortUrl
+                        }                        
+                        console.log("JSON", jsonResponse);
+                       // var output = '{' + '"originalUrl":"' + record.originalUrl + '",' + '"shortUrl":"' + config.baseUrl + shortUrl + '"}';
+                        res.send(jsonResponse); //success
                     }
                 });
             }
