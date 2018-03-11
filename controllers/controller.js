@@ -35,7 +35,6 @@ var generateSid = function (base36) {
 };
 
 exports.postUrl = function (req, res) {
-    //console.log('POST url', req);
     var url = '';
     var jsonResponse = {
         error: "Invalid Url"
@@ -43,7 +42,6 @@ exports.postUrl = function (req, res) {
 
     if (req.query.url) { // Rebuild posted url with params. TODO: trim ?
         url = req.query.url;
-        console.log("POST: req.query", url);
         urlObject = req.query;
         if (Object.keys(urlObject).length > 1) {
             var rebuildedUrl = '';
@@ -52,8 +50,7 @@ exports.postUrl = function (req, res) {
             }
             var url = rebuildedUrl.replace(/\s/g, '+').slice(5);
         }
-    } else if (Object.keys(req.body).length !== 0) { // POST via browser without ajax
-        console.log("POST: req.body", req.body);
+    } else if (Object.keys(req.body).length !== 0) { // POST via browser without ajax        
         if (!req.body.url || req.body.url < 4) { // Pre validation filter         
             return res.send(jsonResponse);
         }
@@ -62,8 +59,8 @@ exports.postUrl = function (req, res) {
         return res.send(jsonResponse);
     }
 
-    url = urlPrefixer(url); // Just in case if user tamper request
-    
+    url = urlPrefixer(url); // Just in case if user tamper the request
+
     if (!validateUrl(url)) {
         res.send(jsonResponse);
     } else {
@@ -74,13 +71,13 @@ exports.postUrl = function (req, res) {
         }, function (err, record) {
             if (err) {
                 res.send(err);
-            }            
+            }
             if (record) {
                 var shortUrl = config.baseUrl + generateShortUrl(record.sid);
                 jsonResponse = {
-                            originalUrl: record.originalUrl,
-                            shortUrl: shortUrl
-                }                
+                    originalUrl: record.originalUrl,
+                    shortUrl: shortUrl
+                }
                 res.send(jsonResponse);
             } else { // If url not exist in DB -> save url
                 var data = new Url({
@@ -92,13 +89,11 @@ exports.postUrl = function (req, res) {
                         jsonResponse.error = 'Error saving document !';
                         res.send(jsonResponse);
                     } else {
-                        var shortUrl = config.baseUrl + generateShortUrl(record.sid);                        
+                        var shortUrl = config.baseUrl + generateShortUrl(record.sid);
                         jsonResponse = {
                             originalUrl: record.originalUrl,
                             shortUrl: shortUrl
-                        }                        
-                        console.log("JSON", jsonResponse);
-                       // var output = '{' + '"originalUrl":"' + record.originalUrl + '",' + '"shortUrl":"' + config.baseUrl + shortUrl + '"}';
+                        }
                         res.send(jsonResponse); //success
                     }
                 });

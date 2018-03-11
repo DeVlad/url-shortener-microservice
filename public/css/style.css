@@ -11,12 +11,39 @@ body {
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
+    font-family: 'Mina', sans-serif;
 }
 
 .help-block {
-    color: white;    
+    color: #ff5d0f;    
 }
 
 p {
-    color: white;
+    color: #fff;
+    font-size: 130%;
 }
+
+.transparent {
+    background: rgba(0, 0, 0, .7);
+}
+
+#btn-shorten {
+    margin-bottom: 2%;
+    background-color: #ff5d0f;
+}
+
+.btn-default {
+    color: #fff;
+    background-color: #ff5d0f;
+    
+   
+}
+
+.btn-default: hover {
+    background-color: #355db2;
+}
+
+.form-control {
+    font-size: 18px;
+}
+
