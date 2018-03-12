@@ -5,7 +5,7 @@ h1 {
     margin-bottom: 30px;
 }
 
-body {    
+body {
     background-image: url(../img/background.jpg);
     background-position: center center;
     background-repeat: no-repeat;
@@ -15,7 +15,12 @@ body {
 }
 
 .help-block {
-    color: #ff5d0f;    
+    color: #ff5d0f;
+    font-size: 16px;
+}
+
+.error {
+    background: rgba(0, 0, 0, .7);
 }
 
 p {
@@ -27,6 +32,10 @@ p {
     background: rgba(0, 0, 0, .7);
 }
 
+.form-control {
+    font-size: 18px;
+}
+
 #btn-shorten {
     margin-bottom: 2%;
     background-color: #ff5d0f;
@@ -35,15 +44,22 @@ p {
 .btn-default {
     color: #fff;
     background-color: #ff5d0f;
-    
-   
 }
 
 .btn-default: hover {
     background-color: #355db2;
 }
 
-.form-control {
-    font-size: 18px;
+/* Change Chrome default form filler pale yellow color */
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus input:-webkit-autofill {
+    -webkit-text-fill-color: black;
+    transition: background-color 5000s ease-in-out 0s;
 }
 
+/* Prevent falling down of scissors button */
+.input-group-btn:last-child>.btn, .input-group-btn:last-child>.btn-group {
+    margin-bottom: 32px;
+}
